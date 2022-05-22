@@ -1,5 +1,5 @@
 import sys
-
+# TODO: Possibly add file support for .txt docs to make multi-line codes easier to use?
 
 def hexToDec(hex):
     # for each digit right to left
