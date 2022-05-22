@@ -33,9 +33,9 @@ def hexToDec(hex):
 
 def decToHex(dec):
     # for each digit left to right
-    #  divide by 16, get remainder, place in digit
-    #  Repeat for each resulting number as long as it's above 15, placing each to the left of the last
-    #  Once above 15, map and add to final total
+    #  divide by 16, get remainder, place in digit (which is a string)
+    #  Repeat for each resulting number as long as it's above 15
+    #  Once equal or below 15, map and add to final string, then reverse
     hexNumber = ""
     digits = {"10": "A",
               "11": "B",
