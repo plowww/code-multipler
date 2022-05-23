@@ -1,3 +1,8 @@
+# Author - Kevin Gomes
+
+# The following script allows easy multiplying of video game code values (typically in address value pairs)
+# Mostly for personal use but can be useful for anyone who needs it. Made to be easy to use
+# TODO: Possibly modify to either accept command line args OR ask the user for input for easier use?
 import sys
 
 # hexToDec takes a hexadecimal string and returns the converted decimal integer
@@ -76,6 +81,8 @@ def singleLineMultiply(string,mul):
     fullValue = "0"*(len(addressValuePair[1])-len(multipliedHexValue)) + multipliedHexValue
     return addressValuePair[0] + " " + fullValue
 
+# fileCodeValueMultiply takes a .txt file full of codes that has already been opened for at least read access and an
+# integer multipler and prints each line multiplied
 def fileCodeValueMultiply(file,mul):
     for line in file:
         line = line.strip()
@@ -87,6 +94,7 @@ def fileCodeValueMultiply(file,mul):
         except:
             print(line)
 
+# The main point of entry
 def main():
     # Get our args and print them to the user - do not include the script filename
     args = sys.argv[1:]
