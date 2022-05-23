@@ -1,6 +1,6 @@
 import sys
-# TODO: Possibly add file support for .txt docs to make multi-line codes easier to use?
 
+# hexToDec takes a hexadecimal string and returns the converted decimal integer
 def hexToDec(hex):
     # for each digit right to left
     # map A - F to the corresponding digit, multiply by 16 to the power of its place starting at 0 (loop counter), then add to total
@@ -31,6 +31,7 @@ def hexToDec(hex):
         
     return total
 
+# decToHex takes a decimal integer and returns a string containing the converted hexadecimal number
 def decToHex(dec):
     # for each digit left to right
     #  divide by 16, get remainder, place in digit (which is a string)
@@ -61,29 +62,54 @@ def decToHex(dec):
     
     return hexNumber[::-1]
 
+# codeValueMultiply takes a potentially multi-line code and multiplier and prints out every line multiplied
 def codeValueMultiply(code,mul):
     codes = (code.split("\n"))
     for i in range(len(codes)):
         line = codes[i].strip()
-        codes[i] = singleLineMultiply(line,mul)
-        print(codes[i])
-    return codes
-    
+        print(singleLineMultiply(line,mul))
 
+# singleLineMultiply takes 1 line of hex code (address value pair) and a multiplier (integer) and returns the same code with multiplied value in hex
 def singleLineMultiply(string,mul):
     addressValuePair = string.split(" ")
     multipliedHexValue = decToHex(hexToDec(addressValuePair[1]) * mul)
     fullValue = "0"*(len(addressValuePair[1])-len(multipliedHexValue)) + multipliedHexValue
     return addressValuePair[0] + " " + fullValue
-    
+
+def fileCodeValueMultiply(file,mul):
+    for line in file:
+        line = line.strip()
+        # If we fail the try, then we have a line that isn't a number aka title of code
+        # Otherwise multiply line and print it out
+        try:
+            print(singleLineMultiply(line,mul))
+        # Print title of code if exception
+        except:
+            print(line)
 
 def main():
+    # Get our args and print them to the user - do not include the script filename
     args = sys.argv[1:]
     print("Your args: ")
-    print(sys.argv)
+    print(args)
+    # If we are in the default mode, we should have 2 args - the code and the multiplier
     if(len(args)==2):
         print("Printing each line of code multiplied by supplied value...")
-        print(codeValueMultiply(args[0],int(args[1])))
+        codeValueMultiply(args[0],int(args[1]))
+        print("Done! Note that code titles have not changed - update titles to reflect that values have been multiplied by " + args[1])
+    # If we have 3 args, we should be in -file mode. Ensure this to be true and read from file
+    elif(len(args)==3 and args[0].lower() == "-file"):
+        try:
+            print("Reading file \"" + args[1] + '"...')
+            file = open(args[1],'r')
+            fileCodeValueMultiply(file,int(args[2]))
+            file.close()
+            print("Done! Note that code titles have not changed - update titles to reflect that values have been multiplied by " + args[2])
+        except:
+            print("Exception: No such file exists with filename \"" + args[1]+'"')
+    # We fail both checks, something is wrong with the arguments
+    else:
+        print("Either not enough arguments passed or too many arguments passed. Please check and try again.")
 
 if __name__=="__main__":
     main()
