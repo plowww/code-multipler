@@ -6,11 +6,10 @@
 import sys
 
 # hexToDec takes a hexadecimal string and returns the converted decimal integer
-def hexToDec(hex):
+def hexToDec(hex: str):
     # for each digit right to left
     # map A - F to the corresponding digit, multiply by 16 to the power of its place starting at 0 (loop counter), then add to total
     # 63 = (3 * 16^0) + (6 * 16^1) = 99
-    hex = str(hex)
     total = 0
     digits = {"A": 10,
               "B": 11,
@@ -37,7 +36,7 @@ def hexToDec(hex):
     return total
 
 # decToHex takes a decimal integer and returns a string containing the converted hexadecimal number
-def decToHex(dec):
+def decToHex(dec: int):
     # for each digit left to right
     #  divide by 16, get remainder, place in digit (which is a string)
     #  Repeat for each resulting number as long as it's above 15
@@ -68,22 +67,22 @@ def decToHex(dec):
     return hexNumber[::-1]
 
 # codeValueMultiply takes a potentially multi-line code and multiplier and prints out every line multiplied
-def codeValueMultiply(code,mul):
+def codeValueMultiply(code: str,mul: int):
     codes = (code.split("\n"))
     for i in range(len(codes)):
         line = codes[i].strip()
         print(singleLineMultiply(line,mul))
 
 # singleLineMultiply takes 1 line of hex code (address value pair) and a multiplier (integer) and returns the same code with multiplied value in hex
-def singleLineMultiply(string,mul):
-    addressValuePair = string.split(" ")
+def singleLineMultiply(line: str,mul: int):
+    addressValuePair = line.split(" ")
     multipliedHexValue = decToHex(hexToDec(addressValuePair[1]) * mul)
     fullValue = "0"*(len(addressValuePair[1])-len(multipliedHexValue)) + multipliedHexValue
     return addressValuePair[0] + " " + fullValue
 
 # fileCodeValueMultiply takes a .txt file full of codes that has already been opened for at least read access and an
 # integer multipler and prints each line multiplied
-def fileCodeValueMultiply(file,mul):
+def fileCodeValueMultiply(file,mul: int):
     for line in file:
         line = line.strip()
         # If we fail the try, then we have a line that isn't a number aka title of code
@@ -104,7 +103,7 @@ def main():
     if(len(args)==2):
         print("Printing each line of code multiplied by supplied value...")
         codeValueMultiply(args[0],int(args[1]))
-        print("Done! Note that code titles have not changed - update titles to reflect that values have been multiplied by " + args[1])
+        print("Done!")
     # If we have 3 args, we should be in -file mode. Ensure this to be true and read from file
     elif(len(args)==3 and args[0].lower() == "-file"):
         try:
@@ -112,7 +111,7 @@ def main():
             file = open(args[1],'r')
             fileCodeValueMultiply(file,int(args[2]))
             file.close()
-            print("Done! Note that code titles have not changed - update titles to reflect that values have been multiplied by " + args[2])
+            print("Done! Note that the file given has not been written to for protection of original data.")
         except:
             print("Exception: No such file exists with filename \"" + args[1]+'"')
     # We fail both checks, something is wrong with the arguments
